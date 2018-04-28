@@ -18,7 +18,21 @@
    // Update the enemy's position, required method for game
    // Parameter: dt, a time delta between ticks
    update(dt) {
+      ctx.beginPath();
+      if(this.x < 505) {
+         this.x = this.x + this.speed * dt;
+      } else {
+         this.x = -(Math.random()*101);
+      }
 
+      ctx.closePath();
+      if(this.x < player.x + 83 &&
+   this.x + 83 > player.x &&
+   this.y === player.y) {
+            debugger;
+         player.x = (505 - 101) / 2;
+         player.y = 605 - 220;
+      }
    }
 
    // Draw the enemy on the screen, required method for game
@@ -54,7 +68,19 @@ class Player {
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 
+const enemyY = [53, 219, 136, 53, 219, 136];
+const enemySprite = 'images/enemy-bug.png';
 
+const allEnemies = [];
+
+enemyY.forEach(function(y) {
+   allEnemies.push(new Enemy({
+      x: -(Math.random()*300),
+      y: y,
+      sprite: enemySprite,
+      speed: Math.random()*101 + 101
+   }));
+});
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
