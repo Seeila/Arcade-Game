@@ -48,7 +48,11 @@
 
 class Player {
    constructor(params) {
-
+      this.sprite = params.sprite;
+      this.x = params.x;
+      this.y = params.y;
+      this.width = '101px';
+      this.height = '171px';
    }
 
    update(dt) {
@@ -80,6 +84,12 @@ enemyY.forEach(function(y) {
       sprite: enemySprite,
       speed: Math.random()*101 + 101
    }));
+});
+
+const player = new Player({
+   sprite: 'images/char-cat-girl.png',
+   x: 101 * 2 ,
+   y:83 * 5
 });
 
 // This listens for key presses and sends the keys to your
