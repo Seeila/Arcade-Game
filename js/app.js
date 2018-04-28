@@ -56,7 +56,22 @@ class Player {
    }
 
    update(dt) {
+      ctx.beginPath();
 
+      if(this.x < 0) {
+         this.x = 0;
+      } else if (this.x > 400) {
+         this.x = 400;
+      } else if ( this.y < 0) {
+         this.y = 385;
+      } else if (this.y > 385) {
+         this.y = 385;
+      } else {
+         this.x = this.x;
+         this.y = this.y;
+      }
+
+      ctx.closePath();
    }
 
    render() {
