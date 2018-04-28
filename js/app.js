@@ -1,12 +1,13 @@
+/*************
+**************
+   Enemy
+*************
+**************/
+
 // Enemies our player must avoid
  class Enemy {
 
     constructor(params) {
-      // Variables applied to each of our instances go here,
-      // we've provided one for you to get started
-
-      // The image/sprite for our enemies, this uses
-      // a helper we've provided to easily load images
       this.x = params.x;
       this.y = params.y;
       this.sprite = params.sprite;
@@ -19,13 +20,16 @@
    // Parameter: dt, a time delta between ticks
    update(dt) {
       ctx.beginPath();
+      //moves the enemy by adding its position with its speed
       if(this.x < 505) {
          this.x = this.x + this.speed * dt;
       } else {
+         //when out of canvas, put back at beginning canvas
          this.x = -101;
       }
-
       ctx.closePath();
+
+      // tests collision with player
       if(this.x < player.x + player.width &&
    this.x + this.width > player.x &&
    this.y < player.y + player.height &&
@@ -42,9 +46,12 @@
 
 }
 
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
+
+/*************
+**************
+   Player
+*************
+**************/
 
 class Player {
    constructor(params) {
@@ -57,11 +64,12 @@ class Player {
 
    update(dt) {
       ctx.beginPath();
-
+      // limits the position of the player inside the canvas window
       if(this.x < 0) {
          this.x = 0;
       } else if (this.x > 101 * 4) {
          this.x = 101 * 4;
+         //when water reached, set the player at it's original position
       } else if ( this.y < 0) {
          this.y = 385;
       } else if (this.y > 385) {
@@ -77,7 +85,7 @@ class Player {
    render() {
        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
    }
-
+   //mouvements of plyaer depending the key pressed
    handleInput(keyNumber) {
       if(keyNumber === 'left') {
          this.x = this.x - 101;
@@ -94,9 +102,6 @@ class Player {
    }
 }
 
-// Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
-// Place the player object in a variable called player
 
 const enemyY = [53, 219, 136, 53, 219, 136];
 const enemySprite = 'images/enemy-bug.png';
@@ -118,8 +123,7 @@ const player = new Player({
    y:83 * 5
 });
 
-// This listens for key presses and sends the keys to your
-// Player.handleInput() method. You don't need to modify this.
+// listens for key presses and sends the keys to the Player.handleInput() method.
 document.addEventListener('keyup', function(e) {
     const allowedKeys = {
         37: 'left',
