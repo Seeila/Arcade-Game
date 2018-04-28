@@ -64,7 +64,18 @@ class Player {
    }
 
    handleInput(keyNumber) {
+      if(keyNumber === 'left') {
+         this.x = this.x - 101;
 
+      } else if(keyNumber === 'up') {
+         this.y = this.y - 83;
+
+      }  else if(keyNumber === 'right') {
+         this.x = this.x + 101;
+
+      }  else if(keyNumber === 'down') {
+         this.y = this.y + 83;
+      }
    }
 }
 
