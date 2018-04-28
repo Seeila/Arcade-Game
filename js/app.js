@@ -11,8 +11,8 @@
       this.y = params.y;
       this.sprite = params.sprite;
       this.speed = params.speed;
-      this.width = 101;
-      this.height = 171;
+      this.width = 80;
+      this.height = 83;
    }
 
    // Update the enemy's position, required method for game
@@ -22,14 +22,14 @@
       if(this.x < 505) {
          this.x = this.x + this.speed * dt;
       } else {
-         this.x = -(Math.random()*101);
+         this.x = -101;
       }
 
       ctx.closePath();
-      if(this.x < player.x + 83 &&
-   this.x + 83 > player.x &&
-   this.y === player.y) {
-            debugger;
+      if(this.x < player.x + player.width &&
+   this.x + this.width > player.x &&
+   this.y < player.y + player.height &&
+   this.height + this.y > player.y) {
          player.x = (505 - 101) / 2;
          player.y = 605 - 220;
       }
@@ -51,8 +51,8 @@ class Player {
       this.sprite = params.sprite;
       this.x = params.x;
       this.y = params.y;
-      this.width = '101px';
-      this.height = '171px';
+      this.width = 80;
+      this.height = 83;
    }
 
    update(dt) {
@@ -60,8 +60,8 @@ class Player {
 
       if(this.x < 0) {
          this.x = 0;
-      } else if (this.x > 400) {
-         this.x = 400;
+      } else if (this.x > 101 * 4) {
+         this.x = 101 * 4;
       } else if ( this.y < 0) {
          this.y = 385;
       } else if (this.y > 385) {
@@ -108,7 +108,7 @@ enemyY.forEach(function(y) {
       x: -(Math.random()*300),
       y: y,
       sprite: enemySprite,
-      speed: Math.random()*101 + 101
+      speed: Math.random()*500 + 101
    }));
 });
 
