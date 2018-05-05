@@ -47,6 +47,153 @@
 }
 
 
+const enemyY = [53, 219, 136, 53, 219, 136];
+const enemySprite = 'images/enemy-bug.png';
+
+const allEnemies = [];
+
+enemyY.forEach(function(y) {
+   allEnemies.push(new Enemy({
+      x: -(Math.random()*300),
+      y: y,
+      sprite: enemySprite,
+      speed: Math.random()*500 + 101
+   }));
+});
+
+
+/*************
+**************
+  Game Title
+*************
+**************/
+
+class MenuTitle {
+   constructor(params) {
+      this.x = params.x || 0;
+      this.y = params.y || 0;
+      this.width = params.width || 505;
+      this.height = params.height || 606;
+      this.title = 'images/title-logo.png';
+      this.titleY = params.titleY;
+   }
+
+   renderTitle() {
+      ctx.drawImage(Resources.get(this.title), this.x, this.titleY);
+   }
+
+   movingTitle(dt) {
+      this.titleY = this.titleY + 100 * dt;
+   }
+}
+
+const menuTitle = new MenuTitle({
+   x: 0,
+   y: 0,
+   width: 505,
+   height: 606,
+   titleY: - 606
+});
+
+/*************
+**************
+Choose character
+*************
+**************/
+
+
+class MenuCharacter {
+   constructor(x = 0, y = 0, sprite ='') {
+      this.insctructions = 'images/char-instructions.png';
+      this.x = x;
+      this.y = y;
+      this.sprite = sprite;
+      this.index = 2;
+   }
+
+   renderInstructions() {
+      ctx.drawImage(Resources.get(this.insctructions), this.x, this.y);
+   }
+
+   render() {
+       ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+   }
+
+   handleInput(keyNumber) {
+      if(keyNumber === 'left'|| keyNumber === 'up') {
+         this.index = this.index - 1;
+      } else if(keyNumber === 'down' || keyNumber === 'right') {
+         this.index  = this.index  + 1;
+      } else if(keyNumber === 'enter') {
+         document.removeEventListener('keyup', characterHandledKeys);
+         document.addEventListener('keyup', playerHandledKeys);
+      }
+      this.update();
+      player.sprite = allCharacterSprites[menuCharacter.index];
+   }
+
+   update(){
+      if (this.index < 0) {
+         this.index=0;
+      } else if (this.index > 4) {
+         this.index=4;
+      }
+
+      allCharacters = [];
+      for (let index in characterX ) {
+         allCharacters.push(new MenuCharacter(characterX[index],83 * 5,characterSprites[this.index][index]));
+      }
+      allCharacters.forEach(function(character) {
+           character.render();
+      });
+   }
+}
+
+const menuCharacter = new MenuCharacter();
+
+let allCharacters = []
+
+const characterX = [0, 101, 202, 303, 404];
+let characterSprites = [
+   ['images/char-cat-girl-selected.png',
+   'images/char-pink-girl-not-selected.png',
+   'images/char-boy-not-selected.png',
+   'images/char-horn-girl-not-selected.png',
+   'images/char-princess-girl-not-selected.png'],
+   ['images/char-cat-girl-not-selected.png',
+      'images/char-pink-girl-selected.png',
+      'images/char-boy-not-selected.png',
+      'images/char-horn-girl-not-selected.png',
+      'images/char-princess-girl-not-selected.png'
+   ],
+   ['images/char-cat-girl-not-selected.png',
+      'images/char-pink-girl-not-selected.png',
+      'images/char-boy-selected.png',
+      'images/char-horn-girl-not-selected.png',
+      'images/char-princess-girl-not-selected.png'
+   ],
+   ['images/char-cat-girl-not-selected.png',
+      'images/char-pink-girl-not-selected.png',
+      'images/char-boy-not-selected.png',
+      'images/char-horn-girl-selected.png',
+      'images/char-princess-girl-not-selected.png'
+   ],
+   ['images/char-cat-girl-not-selected.png',
+      'images/char-pink-girl-not-selected.png',
+      'images/char-boy-not-selected.png',
+      'images/char-horn-girl-not-selected.png',
+      'images/char-princess-girl-selected.png'
+   ]
+];
+
+for (let index in characterX ) {
+   allCharacters.push(new MenuCharacter(characterX[index],83 * 5,characterSprites[2][index]));
+}
+
+
+
+
+
 /*************
 **************
    Player
@@ -102,73 +249,38 @@ class Player {
    }
 }
 
-
-const enemyY = [53, 219, 136, 53, 219, 136];
-const enemySprite = 'images/enemy-bug.png';
-
-const allEnemies = [];
-
-enemyY.forEach(function(y) {
-   allEnemies.push(new Enemy({
-      x: -(Math.random()*300),
-      y: y,
-      sprite: enemySprite,
-      speed: Math.random()*500 + 101
-   }));
-});
+const allCharacterSprites = ['images/char-cat-girl.png',
+'images/char-pink-girl.png',
+'images/char-boy.png',
+'images/char-horn-girl.png',
+'images/char-princess-girl.png'];
 
 const player = new Player({
-   sprite: 'images/char-cat-girl.png',
+   sprite: allCharacterSprites[menuCharacter.index],
    x: 101 * 2 ,
    y:83 * 5
 });
 
-// listens for key presses and sends the keys to the Player.handleInput() method.
-document.addEventListener('keyup', function(e) {
-    const allowedKeys = {
-        37: 'left',
-        38: 'up',
-        39: 'right',
-        40: 'down'
-    };
 
-    player.handleInput(allowedKeys[e.keyCode]);
-});
 
-/*************
-**************
-   Title
-*************
-**************/
+document.addEventListener('keyup', characterHandledKeys);
 
-class MenuTitle {
-   constructor(params) {
-      this.x = params.x || 0;
-      this.y = params.y || 0;
-      this.width = params.width || 505;
-      this.height = params.height || 606;
-      this.sprite = 'images/title-bg.png';
-      this.title = 'images/title-logo.png';
-      this.titleY = params.titleY;
-   }
-
-   renderBackground() {
-      ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-   }
-
-   renderTitle() {
-      ctx.drawImage(Resources.get(this.title), this.x, this.titleY);
-   }
-
-   movingTitle(dt) {
-      this.titleY = this.titleY + 100 * dt;
-   }
+function characterHandledKeys(e){
+   const allowedKeys = {
+      13: 'enter',
+      37: 'left',
+      38: 'up',
+      39: 'right',
+      40: 'down'
+   };
+   menuCharacter.handleInput(allowedKeys[e.keyCode]);
 }
-
-const menuTitle = new MenuTitle({
-   x: 0,
-   y: 0,
-   width: 505,
-   height: 606,
-   titleY: - 606
-});
+function playerHandledKeys(e){
+   const allowedKeys = {
+      37: 'left',
+      38: 'up',
+      39: 'right',
+      40: 'down'
+   };
+   player.handleInput(allowedKeys[e.keyCode]);
+}

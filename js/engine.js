@@ -67,7 +67,7 @@ var Engine = (function(global) {
       let numberOfFrame = 0;
       animateTitle(numberOfFrame);
       lastTime = Date.now();
-      setTimeout(main, 4000);
+      setTimeout(chooseCaracter, 4000);
     }
 
     /* This function is called by main (our game loop) and itself calls all
@@ -167,6 +167,31 @@ var Engine = (function(global) {
 
     /***********************
     ************************
+         Render Grass
+    ************************
+    ***********************/
+
+    function renderGrass() {
+      /* This array holds the relative URL to the image used
+         * for that particular row of the game level.
+         */
+      const rowImages = 'images/grass-block.png',
+             numRows = 6,
+             numCols = 5;
+
+      let row, col;
+
+      ctx.clearRect(0,0,canvas.width,canvas.height)
+
+      for (row = 0; row < numRows; row++) {
+            for (col = 0; col < numCols; col++) {
+                ctx.drawImage(Resources.get(rowImages), col * 101, row * 83);
+            }
+      }
+    }
+
+    /***********************
+    ************************
          GAME TITLE
     ************************
     ***********************/
@@ -195,15 +220,38 @@ var Engine = (function(global) {
 
          ctx.clearRect(0,0,canvas.width,canvas.height);
 
-         menuTitle.renderBackground();
+         renderGrass();
          menuTitle.renderTitle();
          numberOfFrame = numberOfFrame + 1;
-
-         console.log(numberOfFrame);
 
          if(numberOfFrame<4000) {
             win.requestAnimationFrame(animateTitle);
          }
+   }
+
+   /***********************
+   ************************
+      CHOOSE CHARACTER
+   ************************
+   ***********************/
+   function chooseCaracter() {
+      renderGrass();
+      menuCharacter.renderInstructions();
+      renderCharachters();
+      document.addEventListener('keyup', function(e) {
+         if(e.keyCode === 13) {
+            document.removeEventListener('keyup', characterHandledKeys);
+            document.addEventListener('keyup', playerHandledKeys);
+            main();
+         }
+      });
+
+   }
+
+   function renderCharachters() {
+      allCharacters.forEach(function(character) {
+           character.render();
+      });
    }
 
     /* Go ahead and load all of the images we know we're going to need to
@@ -220,7 +268,17 @@ var Engine = (function(global) {
         'images/char-pink-girl.png',
         'images/char-horn-girl.png',
         'images/char-princess-girl.png',
-        'images/title-bg.png',
+        'images/char-boy-not-selected.png',
+        'images/char-cat-girl-not-selected.png',
+        'images/char-pink-girl-not-selected.png',
+        'images/char-horn-girl-not-selected.png',
+        'images/char-princess-girl-not-selected.png',
+        'images/char-boy-selected.png',
+        'images/char-cat-girl-selected.png',
+        'images/char-pink-girl-selected.png',
+        'images/char-horn-girl-selected.png',
+        'images/char-princess-girl-selected.png',
+        'images/char-instructions.png',
         'images/title-logo.png'
     ]);
     Resources.onReady(init);
