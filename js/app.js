@@ -69,31 +69,26 @@ enemyY.forEach(function(y) {
 **************/
 
 class MenuTitle {
-   constructor(params) {
-      this.x = params.x || 0;
-      this.y = params.y || 0;
-      this.width = params.width || 505;
-      this.height = params.height || 606;
+   constructor(y = 0) {
+      this.x = 0;
+      this.y = y;
+      this.width = 505;
+      this.height = 606;
       this.title = 'images/title-logo.png';
-      this.titleY = params.titleY;
    }
 
    renderTitle() {
-      ctx.drawImage(Resources.get(this.title), this.x, this.titleY);
+      ctx.beginPath();
+      ctx.drawImage(Resources.get(this.title), this.x, this.y);
+      ctx.closePath();
    }
 
    movingTitle(dt) {
-      this.titleY = this.titleY + 100 * dt;
+      this.y = this.y + 10;
    }
 }
 
-const menuTitle = new MenuTitle({
-   x: 0,
-   y: 0,
-   width: 505,
-   height: 606,
-   titleY: - 606
-});
+const menuTitle = new MenuTitle(-606);
 
 /*************
 **************
@@ -118,15 +113,12 @@ class MenuCharacter {
    render() {
        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
    }
-
+   //selects the character
    handleInput(keyNumber) {
       if(keyNumber === 'left'|| keyNumber === 'up') {
          this.index = this.index - 1;
       } else if(keyNumber === 'down' || keyNumber === 'right') {
          this.index  = this.index  + 1;
-      } else if(keyNumber === 'enter') {
-         document.removeEventListener('keyup', characterHandledKeys);
-         document.addEventListener('keyup', playerHandledKeys);
       }
       this.update();
       player.sprite = allCharacterSprites[menuCharacter.index];
@@ -139,6 +131,7 @@ class MenuCharacter {
          this.index=4;
       }
 
+      // empties then changed the sprite of the caracters depending the index
       allCharacters = [];
       for (let index in characterX ) {
          allCharacters.push(new MenuCharacter(characterX[index],83 * 5,characterSprites[this.index][index]));
@@ -232,7 +225,7 @@ class Player {
    render() {
        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
    }
-   //mouvements of plyaer depending the key pressed
+   //mouvements of player depending the key pressed
    handleInput(keyNumber) {
       if(keyNumber === 'left') {
          this.x = this.x - 101;

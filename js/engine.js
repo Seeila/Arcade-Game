@@ -22,7 +22,7 @@ var Engine = (function(global) {
         win = global.window,
         canvas = doc.createElement('canvas'),
         ctx = canvas.getContext('2d'),
-        lastTime;
+        lastTime, lasTimeTitle;
 
     canvas.width = 505;
     canvas.height = 606;
@@ -64,9 +64,9 @@ var Engine = (function(global) {
      */
     function init() {
       reset();
-      let numberOfFrame = 0;
-      animateTitle(numberOfFrame);
-      lastTime = Date.now();
+      menuTitle.renderTitle();
+      let startTime = (new Date()).getTime();
+      animateTitle(startTime, 0);
       setTimeout(chooseCaracter, 4000);
     }
 
@@ -196,38 +196,35 @@ var Engine = (function(global) {
     ************************
     ***********************/
 
-    function animateTitle(numberOfFrame) {
-         let newY = 2;
-
-         if(numberOfFrame < 650) {
-            newY = 15;
-         } else if (numberOfFrame >= 650 && numberOfFrame <= 750 ) {
-            newY = -8;
-         } else if (numberOfFrame > 750 && numberOfFrame < 850 ) {
-            newY = 8;
-         } else if (numberOfFrame >= 850 && numberOfFrame <= 950 ) {
-            newY = -5;
-         } else if (numberOfFrame > 950 && numberOfFrame < 1050 ) {
-            newY = 5;
-         } else if (numberOfFrame >= 1050 && numberOfFrame <= 1150 ) {
-            newY = -2;
-         } else if (numberOfFrame > 1150 && numberOfFrame < 1250 ) {
-            newY = 2;
-         } else {
-            newY = 0;
-         }
-         menuTitle.titleY += newY;
+function animateTitle(startTime, frames) {
+      let numberOfFrames = frames;
+      const time = Date.now();
+      const delta = (time - lasTimeTitle) / 1000;
 
          ctx.clearRect(0,0,canvas.width,canvas.height);
 
          renderGrass();
-         menuTitle.renderTitle();
-         numberOfFrame = numberOfFrame + 1;
-
-         if(numberOfFrame<4000) {
-            win.requestAnimationFrame(animateTitle);
+         if(menuTitle.y < 0) {
+            menuTitle.movingTitle(delta);
+         } else {
+            console.log(numberOfFrames)
          }
+         menuTitle.renderTitle();
+         numberOfFrames += 1;
+         lasTimeTitle = time;
+
+         if (numberOfFrames < 150) {
+            requestAnimationFrame(
+               function(timestamp){
+                  animateTitle(startTime, numberOfFrames);
+               }
+           );
+         }
+
    }
+
+
+
 
    /***********************
    ************************
