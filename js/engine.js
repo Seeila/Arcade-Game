@@ -38,8 +38,8 @@ var Engine = (function(global) {
          * would be the same for everyone (regardless of how fast their
          * computer is) - hurray time!
          */
-        var now = Date.now(),
-            dt = (now - lastTime) / 1000.0;
+        const now = Date.now();
+         const dt = (now - lastTime) / 1000.0;
 
         /* Call our update/render functions, pass along the time delta to
          * our update function since it may be used for smooth animation.
@@ -63,9 +63,11 @@ var Engine = (function(global) {
      * game loop.
      */
     function init() {
-        reset();
-        lastTime = Date.now();
-        main();
+      reset();
+      let numberOfFrame = 0;
+      animateTitle(numberOfFrame);
+      lastTime = Date.now();
+      setTimeout(main, 4000);
     }
 
     /* This function is called by main (our game loop) and itself calls all
@@ -161,8 +163,48 @@ var Engine = (function(global) {
      * those sorts of things. It's only called once by the init() method.
      */
     function reset() {
-        // noop
     }
+
+    /***********************
+    ************************
+         GAME TITLE
+    ************************
+    ***********************/
+
+    function animateTitle(numberOfFrame) {
+         let newY = 2;
+
+         if(numberOfFrame < 650) {
+            newY = 15;
+         } else if (numberOfFrame >= 650 && numberOfFrame <= 750 ) {
+            newY = -8;
+         } else if (numberOfFrame > 750 && numberOfFrame < 850 ) {
+            newY = 8;
+         } else if (numberOfFrame >= 850 && numberOfFrame <= 950 ) {
+            newY = -5;
+         } else if (numberOfFrame > 950 && numberOfFrame < 1050 ) {
+            newY = 5;
+         } else if (numberOfFrame >= 1050 && numberOfFrame <= 1150 ) {
+            newY = -2;
+         } else if (numberOfFrame > 1150 && numberOfFrame < 1250 ) {
+            newY = 2;
+         } else {
+            newY = 0;
+         }
+         menuTitle.titleY += newY;
+
+         ctx.clearRect(0,0,canvas.width,canvas.height);
+
+         menuTitle.renderBackground();
+         menuTitle.renderTitle();
+         numberOfFrame = numberOfFrame + 1;
+
+         console.log(numberOfFrame);
+
+         if(numberOfFrame<4000) {
+            win.requestAnimationFrame(animateTitle);
+         }
+   }
 
     /* Go ahead and load all of the images we know we're going to need to
      * draw our game level. Then set init as the callback method, so that when
@@ -173,7 +215,13 @@ var Engine = (function(global) {
         'images/water-block.png',
         'images/grass-block.png',
         'images/enemy-bug.png',
-        'images/char-cat-girl.png'
+        'images/char-boy.png',
+        'images/char-cat-girl.png',
+        'images/char-pink-girl.png',
+        'images/char-horn-girl.png',
+        'images/char-princess-girl.png',
+        'images/title-bg.png',
+        'images/title-logo.png'
     ]);
     Resources.onReady(init);
 

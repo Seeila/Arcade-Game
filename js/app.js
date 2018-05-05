@@ -134,3 +134,41 @@ document.addEventListener('keyup', function(e) {
 
     player.handleInput(allowedKeys[e.keyCode]);
 });
+
+/*************
+**************
+   Title
+*************
+**************/
+
+class MenuTitle {
+   constructor(params) {
+      this.x = params.x || 0;
+      this.y = params.y || 0;
+      this.width = params.width || 505;
+      this.height = params.height || 606;
+      this.sprite = 'images/title-bg.png';
+      this.title = 'images/title-logo.png';
+      this.titleY = params.titleY;
+   }
+
+   renderBackground() {
+      ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+   }
+
+   renderTitle() {
+      ctx.drawImage(Resources.get(this.title), this.x, this.titleY);
+   }
+
+   movingTitle(dt) {
+      this.titleY = this.titleY + 100 * dt;
+   }
+}
+
+const menuTitle = new MenuTitle({
+   x: 0,
+   y: 0,
+   width: 505,
+   height: 606,
+   titleY: - 606
+});
