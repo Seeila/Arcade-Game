@@ -52,6 +52,10 @@ var Engine = (function(global) {
          */
         lastTime = now;
 
+        if(player.y <= 0 ) {
+           endGame();
+        }
+
         /* Use the browser's requestAnimationFrame function to call this
          * function again as soon as the browser is able to draw another frame.
          */
@@ -63,8 +67,6 @@ var Engine = (function(global) {
      * game loop.
      */
     function init() {
-      reset();
-      menuTitle.renderTitle();
       let startTime = (new Date()).getTime();
       animateTitle(startTime, 0);
       setTimeout(chooseCaracter, 4000);
@@ -163,6 +165,14 @@ var Engine = (function(global) {
      * those sorts of things. It's only called once by the init() method.
      */
     function reset() {
+       lastTime = 0;
+       player.y = 385;
+       player.x = 202;
+
+       allEnemies.forEach(function(enemy) {
+         enemy.speed = Math.random()*500 + 101;
+       });
+       main();
     }
 
     /***********************
@@ -206,9 +216,8 @@ function animateTitle(startTime, frames) {
          renderGrass();
          if(menuTitle.y < 0) {
             menuTitle.movingTitle(delta);
-         } else {
-            console.log(numberOfFrames)
          }
+
          menuTitle.renderTitle();
          numberOfFrames += 1;
          lasTimeTitle = time;
@@ -232,16 +241,21 @@ function animateTitle(startTime, frames) {
    ************************
    ***********************/
    function chooseCaracter() {
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      document.addEventListener('keyup', characterHandledKeys);
       renderGrass();
-      menuCharacter.renderInstructions();
+      menuCharacter.renderTitle();
       renderCharachters();
-      document.addEventListener('keyup', function(e) {
+      document.addEventListener('keyup', startGame);
+      function startGame(e){
          if(e.keyCode === 13) {
+            console.log(e.keyCode);
             document.removeEventListener('keyup', characterHandledKeys);
+            document.removeEventListener('keyup', startGame);
             document.addEventListener('keyup', playerHandledKeys);
             main();
          }
-      });
+      }
 
    }
 
@@ -249,6 +263,29 @@ function animateTitle(startTime, frames) {
       allCharacters.forEach(function(character) {
            character.render();
       });
+   }
+
+   /***********************
+   ************************
+        End Game
+   ************************
+   ***********************/
+
+   function endGame(){
+      document.removeEventListener('keyup', playerHandledKeys);
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      renderGrass();
+      endTitle.renderTitle();
+
+      document.addEventListener('keyup', restartGame);
+
+      function restartGame(e){
+         if(e.keyCode === 13) {
+            document.removeEventListener('keyup', restartGame);
+            document.addEventListener('keyup', playerHandledKeys);
+            reset();
+         }
+      }
    }
 
     /* Go ahead and load all of the images we know we're going to need to
@@ -276,7 +313,8 @@ function animateTitle(startTime, frames) {
         'images/char-horn-girl-selected.png',
         'images/char-princess-girl-selected.png',
         'images/char-instructions.png',
-        'images/title-logo.png'
+        'images/title-logo.png',
+        'images/end-title.png'
     ]);
     Resources.onReady(init);
 

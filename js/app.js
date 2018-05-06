@@ -98,16 +98,16 @@ Choose character
 
 
 class MenuCharacter {
-   constructor(x = 0, y = 0, sprite ='') {
-      this.insctructions = 'images/char-instructions.png';
+   constructor(x = 0, y = 0, sprite ='', title = '') {
+      this.title = title;
       this.x = x;
       this.y = y;
       this.sprite = sprite;
       this.index = 2;
    }
 
-   renderInstructions() {
-      ctx.drawImage(Resources.get(this.insctructions), this.x, this.y);
+   renderTitle() {
+      ctx.drawImage(Resources.get(this.title), this.x, this.y);
    }
 
    render() {
@@ -142,7 +142,8 @@ class MenuCharacter {
    }
 }
 
-const menuCharacter = new MenuCharacter();
+const menuCharacter = new MenuCharacter(0, 0, '', 'images/char-instructions.png');
+const endTitle = new MenuCharacter(0, 0, '', 'images/end-title.png' );
 
 let allCharacters = []
 
@@ -209,9 +210,6 @@ class Player {
          this.x = 0;
       } else if (this.x > 101 * 4) {
          this.x = 101 * 4;
-         //when water reached, set the player at it's original position
-      } else if ( this.y < 0) {
-         this.y = 385;
       } else if (this.y > 385) {
          this.y = 385;
       } else {
@@ -256,7 +254,7 @@ const player = new Player({
 
 
 
-document.addEventListener('keyup', characterHandledKeys);
+
 
 function characterHandledKeys(e){
    const allowedKeys = {
