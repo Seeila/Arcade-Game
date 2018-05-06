@@ -5,9 +5,8 @@
 **************/
 
 // Enemies our player must avoid
- class Enemy {
-
-    constructor(params) {
+class Enemy {
+   constructor(params) {
       this.x = params.x;
       this.y = params.y;
       this.sprite = params.sprite;
@@ -21,7 +20,7 @@
    update(dt) {
       ctx.beginPath();
       //moves the enemy by adding its position with its speed
-      if(this.x < 505) {
+      if (this.x < 505) {
          this.x = this.x + this.speed * dt;
       } else {
          //when out of canvas, put back at beginning canvas
@@ -30,10 +29,12 @@
       ctx.closePath();
 
       // tests collision with player
-      if(this.x < player.x + player.width &&
-   this.x + this.width > player.x &&
-   this.y < player.y + player.height &&
-   this.height + this.y > player.y) {
+      if (
+         this.x < player.x + player.width &&
+         this.x + this.width > player.x &&
+         this.y < player.y + player.height &&
+         this.height + this.y > player.y
+      ) {
          player.x = (505 - 101) / 2;
          player.y = 605 - 220;
       }
@@ -41,26 +42,25 @@
 
    // Draw the enemy on the screen, required method for game
    render() {
-       ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+      ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
    }
-
 }
 
-
 const enemyY = [53, 219, 136, 53, 219, 136];
-const enemySprite = 'images/enemy-bug.png';
+const enemySprite = "images/enemy-bug.png";
 
 const allEnemies = [];
 
 enemyY.forEach(function(y) {
-   allEnemies.push(new Enemy({
-      x: -(Math.random()*300),
-      y: y,
-      sprite: enemySprite,
-      speed: Math.random()*500 + 101
-   }));
+   allEnemies.push(
+      new Enemy({
+         x: -(Math.random() * 300),
+         y: y,
+         sprite: enemySprite,
+         speed: Math.random() * 500 + 101
+      })
+   );
 });
-
 
 /*************
 **************
@@ -74,7 +74,7 @@ class MenuTitle {
       this.y = y;
       this.width = 505;
       this.height = 606;
-      this.title = 'images/title-logo.png';
+      this.title = "images/title-logo.png";
    }
 
    renderTitle() {
@@ -96,9 +96,8 @@ Choose character
 *************
 **************/
 
-
 class MenuCharacter {
-   constructor(x = 0, y = 0, sprite ='', title = '') {
+   constructor(x = 0, y = 0, sprite = "", title = "") {
       this.title = title;
       this.x = x;
       this.y = y;
@@ -111,82 +110,97 @@ class MenuCharacter {
    }
 
    render() {
-       ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+      ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
    }
    //selects the character
    handleInput(keyNumber) {
-      if(keyNumber === 'left'|| keyNumber === 'up') {
+      if (keyNumber === "left" || keyNumber === "up") {
          this.index = this.index - 1;
-      } else if(keyNumber === 'down' || keyNumber === 'right') {
-         this.index  = this.index  + 1;
+      } else if (keyNumber === "down" || keyNumber === "right") {
+         this.index = this.index + 1;
       }
       this.update();
       player.sprite = allCharacterSprites[menuCharacter.index];
    }
 
-   update(){
+   update() {
       if (this.index < 0) {
-         this.index=0;
+         this.index = 0;
       } else if (this.index > 4) {
-         this.index=4;
+         this.index = 4;
       }
 
       // empties then changed the sprite of the caracters depending the index
       allCharacters = [];
-      for (let index in characterX ) {
-         allCharacters.push(new MenuCharacter(characterX[index],83 * 5,characterSprites[this.index][index]));
+      for (let index in characterX) {
+         allCharacters.push(
+            new MenuCharacter(
+               characterX[index],
+               83 * 5,
+               characterSprites[this.index][index]
+            )
+         );
       }
       allCharacters.forEach(function(character) {
-           character.render();
+         character.render();
       });
    }
 }
 
-const menuCharacter = new MenuCharacter(0, 0, '', 'images/char-instructions.png');
-const endTitle = new MenuCharacter(0, 0, '', 'images/end-title.png' );
+const menuCharacter = new MenuCharacter(
+   0,
+   0,
+   "",
+   "images/char-instructions.png"
+);
+const endTitle = new MenuCharacter(0, 0, "", "images/end-title.png");
 
-let allCharacters = []
+let allCharacters = [];
 
 const characterX = [0, 101, 202, 303, 404];
 let characterSprites = [
-   ['images/char-cat-girl-selected.png',
-   'images/char-pink-girl-not-selected.png',
-   'images/char-boy-not-selected.png',
-   'images/char-horn-girl-not-selected.png',
-   'images/char-princess-girl-not-selected.png'],
-   ['images/char-cat-girl-not-selected.png',
-      'images/char-pink-girl-selected.png',
-      'images/char-boy-not-selected.png',
-      'images/char-horn-girl-not-selected.png',
-      'images/char-princess-girl-not-selected.png'
+   [
+      "images/char-cat-girl-selected.png",
+      "images/char-pink-girl-not-selected.png",
+      "images/char-boy-not-selected.png",
+      "images/char-horn-girl-not-selected.png",
+      "images/char-princess-girl-not-selected.png"
    ],
-   ['images/char-cat-girl-not-selected.png',
-      'images/char-pink-girl-not-selected.png',
-      'images/char-boy-selected.png',
-      'images/char-horn-girl-not-selected.png',
-      'images/char-princess-girl-not-selected.png'
+   [
+      "images/char-cat-girl-not-selected.png",
+      "images/char-pink-girl-selected.png",
+      "images/char-boy-not-selected.png",
+      "images/char-horn-girl-not-selected.png",
+      "images/char-princess-girl-not-selected.png"
    ],
-   ['images/char-cat-girl-not-selected.png',
-      'images/char-pink-girl-not-selected.png',
-      'images/char-boy-not-selected.png',
-      'images/char-horn-girl-selected.png',
-      'images/char-princess-girl-not-selected.png'
+   [
+      "images/char-cat-girl-not-selected.png",
+      "images/char-pink-girl-not-selected.png",
+      "images/char-boy-selected.png",
+      "images/char-horn-girl-not-selected.png",
+      "images/char-princess-girl-not-selected.png"
    ],
-   ['images/char-cat-girl-not-selected.png',
-      'images/char-pink-girl-not-selected.png',
-      'images/char-boy-not-selected.png',
-      'images/char-horn-girl-not-selected.png',
-      'images/char-princess-girl-selected.png'
+   [
+      "images/char-cat-girl-not-selected.png",
+      "images/char-pink-girl-not-selected.png",
+      "images/char-boy-not-selected.png",
+      "images/char-horn-girl-selected.png",
+      "images/char-princess-girl-not-selected.png"
+   ],
+   [
+      "images/char-cat-girl-not-selected.png",
+      "images/char-pink-girl-not-selected.png",
+      "images/char-boy-not-selected.png",
+      "images/char-horn-girl-not-selected.png",
+      "images/char-princess-girl-selected.png"
    ]
 ];
 
-for (let index in characterX ) {
-   allCharacters.push(new MenuCharacter(characterX[index],83 * 5,characterSprites[2][index]));
+for (let index in characterX) {
+   allCharacters.push(
+      new MenuCharacter(characterX[index], 83 * 5, characterSprites[2][index])
+   );
 }
-
-
-
-
 
 /*************
 **************
@@ -206,7 +220,7 @@ class Player {
    update(dt) {
       ctx.beginPath();
       // limits the position of the player inside the canvas window
-      if(this.x < 0) {
+      if (this.x < 0) {
          this.x = 0;
       } else if (this.x > 101 * 4) {
          this.x = 101 * 4;
@@ -221,57 +235,52 @@ class Player {
    }
 
    render() {
-       ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+      ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
    }
    //mouvements of player depending the key pressed
    handleInput(keyNumber) {
-      if(keyNumber === 'left') {
+      if (keyNumber === "left") {
          this.x = this.x - 101;
-
-      } else if(keyNumber === 'up') {
+      } else if (keyNumber === "up") {
          this.y = this.y - 83;
-
-      }  else if(keyNumber === 'right') {
+      } else if (keyNumber === "right") {
          this.x = this.x + 101;
-
-      }  else if(keyNumber === 'down') {
+      } else if (keyNumber === "down") {
          this.y = this.y + 83;
       }
    }
 }
 
-const allCharacterSprites = ['images/char-cat-girl.png',
-'images/char-pink-girl.png',
-'images/char-boy.png',
-'images/char-horn-girl.png',
-'images/char-princess-girl.png'];
+const allCharacterSprites = [
+   "images/char-cat-girl.png",
+   "images/char-pink-girl.png",
+   "images/char-boy.png",
+   "images/char-horn-girl.png",
+   "images/char-princess-girl.png"
+];
 
 const player = new Player({
    sprite: allCharacterSprites[menuCharacter.index],
-   x: 101 * 2 ,
-   y:83 * 5
+   x: 101 * 2,
+   y: 83 * 5
 });
 
-
-
-
-
-function characterHandledKeys(e){
+function characterHandledKeys(e) {
    const allowedKeys = {
-      13: 'enter',
-      37: 'left',
-      38: 'up',
-      39: 'right',
-      40: 'down'
+      13: "enter",
+      37: "left",
+      38: "up",
+      39: "right",
+      40: "down"
    };
    menuCharacter.handleInput(allowedKeys[e.keyCode]);
 }
-function playerHandledKeys(e){
+function playerHandledKeys(e) {
    const allowedKeys = {
-      37: 'left',
-      38: 'up',
-      39: 'right',
-      40: 'down'
+      37: "left",
+      38: "up",
+      39: "right",
+      40: "down"
    };
    player.handleInput(allowedKeys[e.keyCode]);
 }
